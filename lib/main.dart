@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:payment_app/clipper.dart';
+import 'package:flutter_tindercard/flutter_tindercard.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,466 +29,227 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  List<BottomNavigationItem> bottomNavigationItem = [
-    BottomNavigationItem(
-        color: Colors.white,
-        icons: Icons.home,
-        text: Text("Home"),
-        selectedItem: true),
-    BottomNavigationItem(
-        color: Colors.black26,
-        icons: Icons.search,
-        text: Text("Search"),
-        selectedItem: false),
-    BottomNavigationItem(
-        color: Colors.black26,
-        icons: Icons.favorite,
-        text: Text("Favorite"),
-        selectedItem: false),
-    BottomNavigationItem(
-        color: Colors.black26,
-        icons: Icons.supervised_user_circle,
-        text: Text("Profile"),
-        selectedItem: false)
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  List<String> welcomeImages = [
+    "assets/welcome0.jpg",
+    "assets/welcome1.jpg",
+    "assets/welcome3.jpg",
+    "assets/welcome2.jpg",
+    "assets/welcome4.jpg",
+    "assets/welcome1.jpg"
   ];
-  var selectedItem = 0;
 
-  Widget _bannerBuilder(BuildContext context) {
-    return Container(
-      color: Color(0xFF2931a5),
-      height: MediaQuery.of(context).size.height / 2.5,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Hey James",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "What would you like to do Today ? ",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w600),
-                    )
-                  ],
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Container(
-                        height: 50.0,
-                        width: 50.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50.0),
-                          color: Colors.white,
+  @override
+  Widget build(BuildContext context) {
+    CardController controller;
+    return Scaffold(
+        backgroundColor: Color(0xFFf0f0f0),
+        body: Column(
+          children: <Widget>[
+            new GradientAppBar("Chuzi App"),
+            Container(
+                height: MediaQuery.of(context).size.height * 0.67,
+                child: TinderSwapCard(
+                    orientation: AmassOrientation.BOTTOM,
+                    totalNum: welcomeImages.length,
+                    stackNum: 3,
+                    swipeEdge: 4.0,
+                    maxWidth: MediaQuery.of(context).size.width * 1.0,
+                    maxHeight: MediaQuery.of(context).size.width * 1.0,
+                    minWidth: MediaQuery.of(context).size.width * 0.9,
+                    minHeight: MediaQuery.of(context).size.width * .9,
+                    cardBuilder: (context, index) => Card(
+                          borderOnForeground: true,
+                          elevation: 8.0,
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            '${welcomeImages[index]}'),
+                                        fit: BoxFit.cover)),
+                              ),
+                            ],
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                )
+                    cardController: controller = CardController(),
+                    swipeUpdateCallback:
+                        (DragUpdateDetails details, Alignment align) {
+                      /// Get swiping card's alignment
+                      if (align.x < 0) {
+                        //Card is LEFT swiping
+                      } else if (align.x > 0) {
+                        //Card is RIGHT swiping
+                      }
+                    },
+                    swipeCompleteCallback:
+                        (CardSwipeOrientation orientation, int index) {
+                      /// Get orientation & index of swiped card!
+                    })),
+          ],
+        ),
+        bottomNavigationBar: Stack(
+          overflow: Overflow.visible,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  height: 80.0,
+                  color: Colors.pinkAccent,
+                ),
+                Container(
+                  
+                  height: 40.0,
+                  width: 40.0,
+                  color: Colors.blue,
+                ),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Container(
-              height: 70.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50.0),
-                color: Color(0xFF3845c9),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.arrow_upward,
-                        color: Colors.white,
-                        size: 14.0,
-                      ),
-                      Text(
-                        "Send",
-                        style: TextStyle(color: Colors.white),
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: 50.0,
-                    width: 50.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50.0),
-                      color: Colors.white,
-                    ),
-                    child: Icon(
-                      Icons.graphic_eq,
-                      color: Color(0xFF3845c9),
-                      size: 30.0,
-                    ),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.arrow_downward,
-                        color: Colors.white,
-                        size: 14.0,
-                      ),
-                      Text(
-                        "Recevie",
-                        style: TextStyle(color: Colors.white),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildBottomList(context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: bottomNavigationItem.map((item) {
-        return GestureDetector(
-          onTap: () {
-            var selectedindex = bottomNavigationItem.indexOf(item);
-            bottomNavigationItem.map((item) {
-              setState(() {
-                if (bottomNavigationItem.indexOf(item) == selectedindex) {
-                  item.selectedItem = true;
-                  item.color = Colors.white;
-                } else {
-                  if (item.selectedItem == true) {
-                    item.selectedItem = false;
-                    item.color = Colors.black26;
-                  }
-                }
-              });
-            }).toList();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              width: item.selectedItem ? 120.0 :50,
-              alignment: Alignment.center,
-              decoration: item.selectedItem
-                  ? BoxDecoration(
-                      color: Color(0xFF2931a5),
-                      borderRadius: BorderRadius.circular(55.0))
-                  : null,
-              child: Padding(
-                padding: const EdgeInsets.all(13.0),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    Center(
-                        child: Icon(
-                      item.icons,
-                      color: item.selectedItem ? item.color : Colors.black54,
-                    )),
-                    item.selectedItem
-                        ? Padding(
-                            padding: EdgeInsets.only(left: 10.0),
-                            child: Center(
-                                child: DefaultTextStyle(
-                              child: item.text,
-                              style: TextStyle(color: item.color),
-                              textAlign: TextAlign.center,
-                            )))
-                        : Container()
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
+            //     Container(
+            //   height: 70.0,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //     children: <Widget>[
 
-  Widget _optionBuilder(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+            //     ],
+            //   ),
+            //   decoration: BoxDecoration(
+            //     color: Colors.white,
+            //     border: Border(top: BorderSide(color: Colors.black12,width: 1.0))
+
+            //   ),
+            // ),
+          ],
+        ));
+  }
+}
+
+class GradientAppBar extends StatelessWidget {
+  final String title;
+  final double barHeight = 70.0;
+
+  GradientAppBar(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    final double statusbarHeight = MediaQuery.of(context).padding.top;
+
+    return Container(
+      padding: EdgeInsets.only(top: statusbarHeight),
+      height: statusbarHeight + barHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              Container(
-                height: 70.0,
-                width: 60.0,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFdadbe5),
-                        offset: Offset(0.0, 9.0),
-                        blurRadius: 19.0,
-                        spreadRadius: 3.0,
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 19.0),
+                  child: Container(
+                    height: 50.0,
+                    width: 50.0,
+                    child: Stack(children: <Widget>[
+                      Center(
+                        child: Icon(
+                          Icons.notifications,
+                          color: Colors.white,
+                        ),
                       ),
-                    ],
-                    borderRadius: BorderRadius.circular(13.0)),
-                child: Icon(
-                  Icons.bookmark_border,
-                  color: Colors.deepOrange,
-                  size: 30.0,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text("Bills"),
-              )
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              Container(
-                height: 70.0,
-                width: 60.0,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFdadbe5),
-                        offset: Offset(0.0, 9.0),
-                        blurRadius: 19.0,
-                        spreadRadius: 3.0,
+                      Positioned(
+                        top: 7.0,
+                        left: 8.0,
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 2.0, horizontal: 6.0),
+                            child: Text(
+                              "2",
+                              style: TextStyle(
+                                  fontSize: 12.0, color: Colors.white),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadiusDirectional.circular(50),
+                              color: Colors.red),
+                        ),
                       ),
-                    ],
-                    borderRadius: BorderRadius.circular(13.0)),
-                child: Icon(
-                  Icons.favorite_border,
-                  color: Colors.deepOrange,
-                  size: 30.0,
+                    ]),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text("Donation"),
-              )
-            ],
+              ],
+            ),
           ),
-          Column(
-            children: <Widget>[
-              Container(
-                height: 70.0,
-                width: 60.0,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFdadbe5),
-                        offset: Offset(0.0, 9.0),
-                        blurRadius: 19.0,
-                        spreadRadius: 3.0,
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Text(
+                  title,
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400),
+                ),
+                RotatedBox(
+                    quarterTurns: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        size: 14,
+                        color: Colors.white,
                       ),
-                    ],
-                    borderRadius: BorderRadius.circular(13.0)),
-                child: Icon(
-                  Icons.people_outline,
-                  color: Colors.deepOrange,
-                  size: 30.0,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text("Recepients"),
-              )
-            ],
+                    ))
+              ],
+            ),
           ),
-          Column(
-            children: <Widget>[
-              Container(
-                height: 70.0,
-                width: 60.0,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFdadbe5),
-                        offset: Offset(0.0, 9.0),
-                        blurRadius: 19.0,
-                        spreadRadius: 3.0,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(13.0)),
-                child: Icon(
-                  Icons.label_outline,
-                  color: Colors.deepOrange,
-                  size: 30.0,
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 19.0),
+                  child: Container(
+                      height: 35.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white70,
+                          borderRadius: BorderRadius.circular(20.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Image.asset('assets/coin.png'),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Text(
+                              "0",
+                              style: TextStyle(
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.w700),
+                            )
+                          ],
+                        ),
+                      )),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  "Offers",
-                ),
-              )
-            ],
-          ),
+              ],
+            ),
+          )
         ],
       ),
-    );
-  }
-
-  Widget _transactionListBuilder(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text("RECENT TRANSACTIONS"),
-            Padding(
-              padding: const EdgeInsets.only(top:14.0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: 60.0,
-                    width: 60.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7.0),
-                        color: Colors.black26),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[Padding(
-                        padding: const EdgeInsets.only(left:8.0),
-                        child: Text("Alexender Young",style: TextStyle(fontSize: 18.0),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left:8.0,top: 8.0),
-                        child: Text("Food Store | 23 October 2019",style: TextStyle(fontSize: 12.0,color: Colors.black54),),
-                      )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Text("\$500.00",style: TextStyle(fontWeight: FontWeight.w800),),
-                       Text("Sent",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 11.0,color: Colors.red),),
-                    ],
-                  )
-                ],
-              ),
-            ),
-             Padding(
-              padding: const EdgeInsets.only(top:14.0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: 60.0,
-                    width: 60.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7.0),
-                        color: Colors.black26),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[Padding(
-                        padding: const EdgeInsets.only(left:8.0),
-                        child: Text("Alexender Young",style: TextStyle(fontSize: 18.0),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left:8.0,top: 8.0),
-                        child: Text("Food Store | 23 October 2019",style: TextStyle(fontSize: 12.0,color: Colors.black54),),
-                      )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Text("\$500.00",style: TextStyle(fontWeight: FontWeight.w800),),
-                       Text("Recevie",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 11.0,color: Colors.green),),
-                    ],
-                  )
-                ],
-              ),
-            ),
-             Padding(
-              padding: const EdgeInsets.only(top:14.0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: 60.0,
-                    width: 60.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7.0),
-                        color: Colors.black26),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[Padding(
-                        padding: const EdgeInsets.only(left:8.0),
-                        child: Text("Alexender Young",style: TextStyle(fontSize: 18.0),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left:8.0,top: 8.0),
-                        child: Text("Food Store | 23 October 2019",style: TextStyle(fontSize: 12.0,color: Colors.black54),),
-                      )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Text("\$500.00",style: TextStyle(fontWeight: FontWeight.w800),),
-                       Text("Sent",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 11.0,color: Colors.green),),
-                    ],
-                  )
-                ],
-              ),
-            )
-          ],
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.0)),
+        gradient: LinearGradient(
+          colors: [Color(0xffA061BA), Color(0xff6499CE)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          _bannerBuilder(context),
-          _optionBuilder(context),
-          _transactionListBuilder(context)
-        ],
-      ),
-      bottomNavigationBar: Container(
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(
-                blurRadius: 10, color: Colors.black26, offset: Offset(0.0, 1.0))
-          ]),
-          height: MediaQuery.of(context).size.height / 10,
-          child: _buildBottomList(context)),
-    );
-  }
-}
-
-class BottomNavigationItem {
-  IconData icons;
-  Text text;
-  Color color;
-  bool selectedItem;
-  BottomNavigationItem({this.color, this.icons, this.text, this.selectedItem});
 }
